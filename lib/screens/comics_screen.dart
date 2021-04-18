@@ -16,9 +16,18 @@ class _ComicsScreenState extends State<ComicsScreen> {
 
   @override
   void initState() {
+
     super.initState();
     final comicsData = context.read<ComicsProvider>();
-    _futureComics = comicsData.fetchComics(3);
+    _futureComics = comicsData.fetchComics(-1);
+    if(comicsData.selectedComicId != null){
+      _futureComics = comicsData.fetchComics(comicsData.selectedComicId);
+      comicsData.setSelectedComicsId(null);
+    }
+    else{
+      _futureComics = comicsData.fetchComics(-1);
+    }
+
   }
 
   @override

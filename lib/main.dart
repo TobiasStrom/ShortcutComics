@@ -4,6 +4,7 @@ import 'package:shortcut_comics/provides/comics_provider.dart';
 import 'package:shortcut_comics/screens/comics_screen.dart';
 import 'package:shortcut_comics/screens/favorites_screen.dart';
 import 'package:shortcut_comics/screens/home_screen.dart';
+import 'package:shortcut_comics/screens/search_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
           '/': (ctx) => HomeScreen(),
           ComicsScreen.routeName : (ctx) => ComicsScreen(),
           FavoritesScreen.routeName : (ctx) => FavoritesScreen(),
+          SearchScreen.routeName : (ctx) => SearchScreen(),
         },
       ),
     );

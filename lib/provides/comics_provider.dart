@@ -9,15 +9,19 @@ import '../models/comics.dart';
 class ComicsProvider with ChangeNotifier{
 
   Comics _selectedComics;
-
   List<Comics> _favoritesComics = [];
+  int _selectedComicsId;
 
   // get methods
   Comics get selectedComics => _selectedComics;
   List<Comics> get favoritesComics => _favoritesComics;
+  int get selectedComicId => _selectedComicsId;
 
   // set methods
 
+  void setSelectedComicsId(int value) {
+    _selectedComicsId = value;
+  }
 
   //Method of returning comics from api
   Future<Comics> fetchComics(int num) async{
