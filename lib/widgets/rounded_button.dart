@@ -10,8 +10,9 @@ class RoundedButton extends StatelessWidget {
   final double height;
   final GestureTapCallback onClick;
   final Color color;
+  final bool deactivate;
 
-  const RoundedButton({Key key, this.text, this.width, this.height, this.onClick, this.color}) : super(key: key);
+  const RoundedButton({Key key, this.text, this.width, this.height, this.onClick, this.color, this.deactivate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class RoundedButton extends StatelessWidget {
         height: height,
         width: width,
         child: ElevatedButton(
-          onPressed: onClick,
+          onPressed: !deactivate ? onClick: null,
           child: Text(text),
           style: ElevatedButton.styleFrom(
             primary: color,

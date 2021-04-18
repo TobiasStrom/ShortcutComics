@@ -23,11 +23,18 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
               Container(
                 height: (mediaQuery.size.height - mediaQuery.padding.top)* 0.1,
                 child: Center(
-                  child: Text(
-                      'Results',
-                    style: TextStyle(
-                      fontSize: 25
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(icon: Icon(Icons.arrow_back), onPressed: ()=> Navigator.pop(context)),
+                      Text(
+                          'Results',
+                        style: TextStyle(
+                          fontSize: 25
+                        ),
+                      ),
+                      IconButton(icon: Icon(Icons.home), onPressed: ()=> Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false)),
+                    ],
                   ),
                 ),
               ),

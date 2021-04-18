@@ -27,7 +27,6 @@ class _ComicsScreenState extends State<ComicsScreen> {
     else{
       _futureComics = comicsData.fetchComics(-1);
     }
-
   }
 
   @override
@@ -58,6 +57,7 @@ class _ComicsScreenState extends State<ComicsScreen> {
                             text: 'Previous',
                             width: mediaQuery.size.width * 0.3,
                             height: 35,
+                            deactivate: comicsData.selectedComics.num != -2 ? false: true,
                             color: Colors.red,
                             onClick: (){
                               _futureComics = comicsData.nextComics(false);// go to previous comics
@@ -67,9 +67,11 @@ class _ComicsScreenState extends State<ComicsScreen> {
                             text: 'Next',
                             width: mediaQuery.size.width * 0.3,
                             height: 35,
+                            deactivate: comicsData.selectedComics.num != -3 ? false: true,
                             color: Colors.green,
                             onClick: (){
-                              _futureComics = comicsData.nextComics(true); //go to next comics
+                              comicsData.selectedComics.num != -3 ?
+                              _futureComics = comicsData.nextComics(true): null; //go to next comics
                             },
                           ),
                         ],
@@ -81,7 +83,15 @@ class _ComicsScreenState extends State<ComicsScreen> {
               return Container(
                 height: (mediaQuery.size.height - mediaQuery.padding.top),
                 child: Center(
-                    child: CircularProgressIndicator()),
+                    child: Container(
+                      height: 300,
+                      child: Column(
+                        children: [
+                          CircularProgressIndicator(),
+                          Text('Check if you have internet connection')
+                        ],
+                      ),
+                    )),
               );
             },
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shortcut_comics/provides/comics_provider.dart';
 import 'package:shortcut_comics/screens/search_result_screen.dart';
+import 'package:shortcut_comics/widgets/rounded_button.dart';
 
 class SearchTextScreen extends StatefulWidget {
   static final routeName = '/search-text';
@@ -15,6 +16,7 @@ class _SearchTextScreenState extends State<SearchTextScreen> {
   final _formKey = GlobalKey<FormState>();
   String _word;
   bool _searching = false;
+  final _nameHolder = TextEditingController();
 
   bool _checkInput(String text){
     RegExp regExp = new RegExp(r"^[a-zA-Z]+$");
@@ -48,7 +50,17 @@ class _SearchTextScreenState extends State<SearchTextScreen> {
           child: Column(
             children: [
               Container(
-                height: (mediaQuery.size.height - mediaQuery.padding.top)* 0.4,
+                height: (mediaQuery.size.height - mediaQuery.padding.top)* 0.1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(icon: Icon(Icons.arrow_back), onPressed: ()=> Navigator.pop(context)),
+                    IconButton(icon: Icon(Icons.home), onPressed: ()=> Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false)),
+                  ],
+                ),
+              ),
+              Container(
+                height: (mediaQuery.size.height - mediaQuery.padding.top)* 0.3,
                 child: Center(
                   child: Text(
                     'Search For a Comics',
@@ -66,6 +78,7 @@ class _SearchTextScreenState extends State<SearchTextScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left:70.0, right: 70, bottom: 20),
                       child: TextFormField (
+                        controller: _nameHolder,
                         onChanged: (value) => _word = value,
                         decoration: const InputDecoration(
                           hintText: 'Some word',
@@ -82,14 +95,13 @@ class _SearchTextScreenState extends State<SearchTextScreen> {
                         },
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: (){
-                        _onSubmit();
-                      },
-                      child: Text(
-                          'Search'
-                      ),
-                    )
+                    RoundedButton(
+                      height: 35,
+                      width: 100,
+                      deactivate: false,
+                      text: 'Search',
+                      onClick: _onSubmit,
+                    ),
                   ],
                 ),
               ): Column(

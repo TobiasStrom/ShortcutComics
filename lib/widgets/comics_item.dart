@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shortcut_comics/models/comics.dart';
 import 'package:shortcut_comics/provides/comics_provider.dart';
@@ -19,17 +20,30 @@ class ComicsItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center, //Center everything on screen
         children: [
           Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Text(
-              comics.title,
-              style: TextStyle(
-                  fontSize: 25
-              ),
-              textAlign: TextAlign.center,
+            padding: const EdgeInsets.all(3.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(icon: Icon(Icons.arrow_back), onPressed: ()=> Navigator.pop(context)),
+                Flexible(
+                  child: Text(
+                    comics.title,
+                    style: TextStyle(
+                        fontSize: 25
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                IconButton(icon: Icon(Icons.home), onPressed: ()=> Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false)),
+              ],
             ),
           ),
-          Image.network(
-            comics.img,
+          InteractiveViewer(
+            child: Image.network(
+              comics.img,
+            ),
+            minScale: 0.5,
+            maxScale: 5,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -87,7 +101,8 @@ class ComicsItem extends StatelessWidget {
                 ),
                 Text(
                     comics.year+ " - " + comics.month + " - " + comics.day
-                )
+                ),
+                
               ],
             ),
           ): Container(),

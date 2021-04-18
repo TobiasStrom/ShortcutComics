@@ -10,6 +10,7 @@ class FavoritesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var comicsData = Provider.of<ComicsProvider>(context);
     List<Comics> favorites = comicsData.favoritesComics;
+    print(favorites.length);
     final mediaQuery = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
@@ -17,11 +18,18 @@ class FavoritesScreen extends StatelessWidget {
           children: [
             Container(child:
               Center(child:
-                Text(
-                  'Favorites',
-                  style: TextStyle(
-                      fontSize: 30
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(icon: Icon(Icons.arrow_back), onPressed: ()=> Navigator.pop(context)),
+                    Text(
+                      'Favorites',
+                      style: TextStyle(
+                          fontSize: 30
+                      ),
+                    ),
+                    IconButton(icon: Icon(Icons.home), onPressed: ()=> Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false)),
+                  ],
                 ),
               ),
               height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.1,

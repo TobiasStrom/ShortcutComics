@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/comics.dart';
 
 class ComicsProvider with ChangeNotifier{
@@ -118,10 +120,20 @@ class ComicsProvider with ChangeNotifier{
     String url ='https://relevantxkcd.appspot.com/process?action=xkcd&query=$text';
     final response = await http.get(Uri.parse(url));
     if(response.statusCode==200) {
-      print(response);
       List<String> responseList = response.body.split("").toList();
       List<String> numbers = [];
       RegExp regExp = new RegExp(r"[0-9a-zA-Z ]+");
+      final intRegex = new RegExp(r' +[0-9]+ +');
+      List<String> testList = [];
+      print('Her');
+      intRegex.allMatches(response.body).map((e){
+        print('From regex' + e.input);
+        testList.add(e.group(0));
+      }
+      );
+      for(var test in testList){
+        print(test);
+      }
 
       for (int i = 0; i < responseList.length; i++) {
         if (regExp.hasMatch(responseList[i])) {
@@ -149,21 +161,32 @@ class ComicsProvider with ChangeNotifier{
 
   }
 
-  Future<List<Comics>> fetchComicsByText(String text) async {
-    _searchComicsList = [];
-    List<int> intComics;
-    await fetchResponseFromTextToList(text).then((value) async {
-      intComics = value;
-      if(intComics.length != 0){
-        List<Comics> resultList = [];
+  void fetchComicsByText(String text) async {
+    _searchComicsList = []; // Clear the search list
+    await fetchResponseFromTextToList(text).then((comicsNumList) async { // get values for method
+      List<int> intComics = comicsNumList; //puts result into list
+      if(intComics.length != 0){ // if list size is not 0
         for(var comicsNub in intComics){
-          _searchComicsList.add(await fetchComics(comicsNub));
+          _searchComicsList.add(await fetchComics(comicsNub)); // loop through and add to search list
         }
-        return resultList;
       }
     });
-    return [];
   }
+
+  //check if device have internet connection
+  Future<bool> checkIfOnline() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        return true;
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+    }
+    return false;
+  }
+
 
   //Make it easy to remember what values means
   int _first = -2;

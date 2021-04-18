@@ -38,8 +38,6 @@ class _SearchScreenState extends State<SearchScreen> {
     return false;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -63,7 +61,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 return Column(
                   children: [
                     Container(
-                      height: (mediaQuery.size.height - mediaQuery.padding.top)* 0.4,
+                      height: (mediaQuery.size.height - mediaQuery.padding.top)* 0.1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(icon: Icon(Icons.arrow_back), onPressed: ()=> Navigator.pop(context)),
+                          IconButton(icon: Icon(Icons.home), onPressed: ()=> Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false)),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: (mediaQuery.size.height - mediaQuery.padding.top)* 0.3,
                       child: Center(
                         child: Text(
                           'Search For a Comics \b between 1-${snapshot.data.num}',
@@ -104,6 +112,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     RoundedButton(
                       height: 35,
                       width: 100,
+                      deactivate: false,
                       text: 'Search',
                       onClick: (){
                         _onSubmit();
