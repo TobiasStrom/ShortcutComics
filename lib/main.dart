@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shortcut_comics/screens/comics_screen.dart';
 import 'package:shortcut_comics/screens/home_screen.dart';
 
 void main() {
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (ctx) => HomeScreen(),
+        ComicsScreen.routeName : (ctx) => ComicsScreen(),
       },
     );
   }

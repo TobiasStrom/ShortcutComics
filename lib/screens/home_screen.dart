@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shortcut_comics/screens/comics_screen.dart';
 import 'package:shortcut_comics/widgets/rounded_button.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -30,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                 width: mediaQuery.size.width * 0.8,
                 height: 40,
                 onClick: () {
-
+                  Navigator.pushNamed(context, ComicsScreen.routeName);//Navigate to today's comics
                 },
               ),
               RoundedButton(
@@ -48,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                 onClick: () {
 
                 },
-              )
+              ),
             ],
           ),
         ),
