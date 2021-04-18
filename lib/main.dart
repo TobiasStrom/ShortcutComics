@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shortcut_comics/provides/comics_provider.dart';
 import 'package:shortcut_comics/screens/comics_screen.dart';
 import 'package:shortcut_comics/screens/home_screen.dart';
 
@@ -7,18 +9,22 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shortcut Comics',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers:[
+        ChangeNotifierProvider(create: (ctx) => ComicsProvider())
+      ],
+      child: MaterialApp(
+        title: 'Shortcut Comics',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        routes: {
+          '/': (ctx) => HomeScreen(),
+          ComicsScreen.routeName : (ctx) => ComicsScreen(),
+        },
       ),
-      routes: {
-        '/': (ctx) => HomeScreen(),
-        ComicsScreen.routeName : (ctx) => ComicsScreen(),
-      },
     );
   }
 }
