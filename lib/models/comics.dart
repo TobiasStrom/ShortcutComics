@@ -10,6 +10,7 @@ class Comics{
   final String year;
   final String month;
   final String day;
+  String imageData;
 
   Comics({
     this.num,
@@ -22,7 +23,8 @@ class Comics{
     this.transcript,
     this.year,
     this.month,
-    this.day});
+    this.day,
+    this.imageData});
 
   factory Comics.fromJson(Map<String, dynamic> json) => Comics(
     num: json['num'],

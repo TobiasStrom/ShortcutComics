@@ -19,7 +19,6 @@ class _ComicsScreenState extends State<ComicsScreen> {
     super.initState();
     final comicsData = context.read<ComicsProvider>();
     _futureComics = comicsData.fetchComics(3);
-    print('Init');
   }
 
   @override

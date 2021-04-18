@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shortcut_comics/models/comics.dart';
@@ -23,7 +25,7 @@ class FavoritesItem extends StatelessWidget {
                   fontSize: 20
               ),
             ),
-            Image.network(comics.img),
+            Image.file(File(comics.imageData)),
             Text(
               'Index: ' + comics.num.toString(),
             ),

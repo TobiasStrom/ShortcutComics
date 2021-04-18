@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import '../models/comics.dart';
 
 class ComicsProvider with ChangeNotifier{
@@ -75,14 +76,28 @@ class ComicsProvider with ChangeNotifier{
     return fetchComics(-1);
   }
 
-  void toggleFavorites(Comics comics){
+  Future<void> toggleFavorites(Comics comics) async {
     final existingIndex =
       _favoritesComics.indexWhere((element) => element.num == comics.num); // get comics index if it is favorites
     if(existingIndex >= 0) {
       _favoritesComics.removeAt(existingIndex); // remove if from the list if it exists
+      try {
+        if (await File(comics.imageData).exists()) { // check if image exists on device
+          await File(comics.imageData).delete(); // delete if exists
+        }
+      } catch (_) {
+        print('Image don\'t exist'); // print error
+      }
     }else{
+      var response = await http.get(Uri.parse(comics.img)); // get image so it can be saved on device
+      Directory appDocDir = await getApplicationDocumentsDirectory(); // get app path on phone
+      var imagesPath = appDocDir.path + "/images"; // set image path
+      await Directory(imagesPath).create(recursive: true); // create directory if noe exist
+      var filePathAndName = appDocDir.path + '/images/${comics.num}.png'; // set file and path name
+      File image = new File(filePathAndName); // make new file from path
+      image.writeAsBytesSync(response.bodyBytes); //write image to device
+      comics.imageData = filePathAndName; // set filepath to imageData.
       _favoritesComics.add(comics); // add if not exits
-
     }
     notifyListeners();
   }
