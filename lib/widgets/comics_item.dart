@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shortcut_comics/models/comics.dart';
+import 'package:shortcut_comics/provides/comics_provider.dart';
 
 class ComicsItem extends StatelessWidget {
   final Comics comics;
@@ -8,6 +10,8 @@ class ComicsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var comicsData = Provider.of<ComicsProvider>(context);
+    bool isFavorites = comicsData.isComicsFavorites(comics.num);
 
     return Padding(
       padding: EdgeInsets.all(15),
@@ -52,13 +56,24 @@ class ComicsItem extends StatelessWidget {
                     ),
                   ),
                 ),
+                (isFavorites)?
                 IconButton(
                   icon: Icon(
                     Icons.favorite,
                     color: Colors.red,
                   ),
+                  onPressed: (){
+                    comicsData.toggleFavorites(comics);
+                  },
                   iconSize: 50,
-                  onPressed: () => null,
+                ):
+                IconButton(
+                  icon: Icon(
+                      Icons.favorite_border_outlined
+                  ),
+                  onPressed: (){
+                    comicsData.toggleFavorites(comics);
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top :8.0),
