@@ -11,16 +11,20 @@ class ComicsProvider with ChangeNotifier{
   Comics _selectedComics;
   List<Comics> _favoritesComics = [];
   int _selectedComicsId;
+  List<Comics> _searchComicsList = [];
 
   // get methods
   Comics get selectedComics => _selectedComics;
   List<Comics> get favoritesComics => _favoritesComics;
+  List<Comics> get searchComicsList => _searchComicsList;
   int get selectedComicId => _selectedComicsId;
 
   // set methods
-
   void setSelectedComicsId(int value) {
     _selectedComicsId = value;
+  }
+  void setSelectedComics(Comics comics){
+    _selectedComics = comics;
   }
 
   //Method of returning comics from api
@@ -110,8 +114,56 @@ class ComicsProvider with ChangeNotifier{
     return _favoritesComics.any((element) => element.num == id);
   }
 
+  Future<List<int>> fetchResponseFromTextToList(String text) async {
+    String url ='https://relevantxkcd.appspot.com/process?action=xkcd&query=$text';
+    final response = await http.get(Uri.parse(url));
+    if(response.statusCode==200) {
+      print(response);
+      List<String> responseList = response.body.split("").toList();
+      List<String> numbers = [];
+      RegExp regExp = new RegExp(r"[0-9a-zA-Z ]+");
 
+      for (int i = 0; i < responseList.length; i++) {
+        if (regExp.hasMatch(responseList[i])) {
+          numbers.add(responseList[i]);
+        }
+      }
+      List<String> matches = numbers.join().split(" ").toList();
+      List<int> lastList = [];
 
+      for (var num in matches) {
+        try {
+          lastList.add(int.parse(num));
+        } catch (_) {
+          print('not string');
+        }
+      }
+      lastList.removeAt(0);
+      lastList.removeAt(0);
+
+      return lastList;
+    }
+    else{
+      return [];
+    }
+
+  }
+
+  Future<List<Comics>> fetchComicsByText(String text) async {
+    _searchComicsList = [];
+    List<int> intComics;
+    await fetchResponseFromTextToList(text).then((value) async {
+      intComics = value;
+      if(intComics.length != 0){
+        List<Comics> resultList = [];
+        for(var comicsNub in intComics){
+          _searchComicsList.add(await fetchComics(comicsNub));
+        }
+        return resultList;
+      }
+    });
+    return [];
+  }
 
   //Make it easy to remember what values means
   int _first = -2;

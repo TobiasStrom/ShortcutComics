@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +20,7 @@ class RoundedButton extends StatelessWidget {
       child: SizedBox(// To set button size
         height: height,
         width: width,
-        child: Platform.isIOS ? // if platform is ios add iOS button else Android button
-          CupertinoButton(
-            child: Text(text),
-            onPressed: onClick,
-            color: color,
-          ) : ElevatedButton(
+        child: ElevatedButton(
           onPressed: onClick,
           child: Text(text),
           style: ElevatedButton.styleFrom(

@@ -13,7 +13,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _nameHolder = TextEditingController();
   Future<Comics> _futureLastComics;
   String _stringFromForm;
   int _searchNumber;
@@ -82,7 +81,6 @@ class _SearchScreenState extends State<SearchScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left:70.0, right: 70, bottom: 20),
                             child: TextFormField(
-                              controller: _nameHolder,
                               keyboardType: TextInputType.number,
                               onChanged: (value) => _stringFromForm = value,
                               decoration: const InputDecoration(
