@@ -40,36 +40,42 @@ class ComicsItem extends StatelessWidget {
           Text(
               comics.alt
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'If you like make favorite:',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.favorite,
-              color: Colors.red,
-            ),
-            iconSize: 50,
-            onPressed: () => null,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top :8.0),
-            child: Text(
-              'Published',
-              style: TextStyle(
-                fontSize: 18,
+          comics.num > 0 ?Container(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'If you like make favorite:',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.favorite,
+                    color: Colors.red,
+                  ),
+                  iconSize: 50,
+                  onPressed: () => null,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top :8.0),
+                  child: Text(
+                    'Published',
+                    style: TextStyle(
+                      fontSize: 18,
 
-              ),
+                    ),
+                  ),
+                ),
+                Text(
+                    comics.year+ " - " + comics.month + " - " + comics.day
+                )
+              ],
             ),
-          ),
-          Text(
-              comics.year+ " - " + comics.month + " - " + comics.day
-          )
+          ): Container(),
         ],
       ),
     );
