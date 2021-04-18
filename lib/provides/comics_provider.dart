@@ -9,7 +9,14 @@ class ComicsProvider with ChangeNotifier{
 
   Comics _selectedComics;
 
+  List<Comics> _favoritesComics = [];
+
+  // get methods
   Comics get selectedComics => _selectedComics;
+  List<Comics> get favoritesComics => _favoritesComics;
+
+  // set methods
+
 
   //Method of returning comics from api
   Future<Comics> fetchComics(int num) async{
@@ -25,7 +32,6 @@ class ComicsProvider with ChangeNotifier{
       notifyListeners();
       return comics;
     }
-
     else if (response.statusCode == HttpStatus.notFound){
       Comics comics = new Comics(
         num: selectedComics.num == 1 ? _first : _last, //set comics number for handling next and prev comics
@@ -50,6 +56,7 @@ class ComicsProvider with ChangeNotifier{
       return comics;
     }
   }
+
   // go through  to comics
   Future<Comics> nextComics(bool next){
     if(_selectedComics.num == _first){ // if selectedComics is the first one go to the first one
@@ -67,6 +74,24 @@ class ComicsProvider with ChangeNotifier{
     }
     return fetchComics(-1);
   }
+
+  void toggleFavorites(Comics comics){
+    final existingIndex =
+      _favoritesComics.indexWhere((element) => element.num == comics.num); // get comics index if it is favorites
+    if(existingIndex >= 0) {
+      _favoritesComics.removeAt(existingIndex); // remove if from the list if it exists
+    }else{
+      _favoritesComics.add(comics); // add if not exits
+
+    }
+    notifyListeners();
+  }
+  // check if comics is favorites;
+  bool isComicsFavorites(int id){
+    return _favoritesComics.any((element) => element.num == id);
+  }
+
+
 
 
   //Make it easy to remember what values means

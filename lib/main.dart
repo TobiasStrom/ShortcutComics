@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shortcut_comics/provides/comics_provider.dart';
 import 'package:shortcut_comics/screens/comics_screen.dart';
+import 'package:shortcut_comics/screens/favorites_screen.dart';
 import 'package:shortcut_comics/screens/home_screen.dart';
 
 void main() {
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (ctx) => HomeScreen(),
           ComicsScreen.routeName : (ctx) => ComicsScreen(),
+          FavoritesScreen.routeName : (ctx) => FavoritesScreen(),
         },
       ),
     );
