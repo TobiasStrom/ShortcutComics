@@ -117,7 +117,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       onClick: (){
                         _onSubmit();
                       },
-                    )
+                    ),
                   ],
                 );
               }else if(snapshot.hasError){

@@ -21,12 +21,11 @@ class HomeScreen extends StatelessWidget {
               Container(
                 height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.5,
                 child: Center(
-                  child: Text(
-                    'The best comics online',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 50,
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/shortcut.png', width: mediaQuery.size.width * 0.5,),
+                    ],
                   ),
                 ),
               ),

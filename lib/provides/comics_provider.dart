@@ -15,13 +15,13 @@ class ComicsProvider with ChangeNotifier{
   int _selectedComicsId;
   List<Comics> _searchComicsList = [];
 
-  // get methods
+  /// get methods
   Comics get selectedComics => _selectedComics;
   List<Comics> get favoritesComics => _favoritesComics;
   List<Comics> get searchComicsList => _searchComicsList;
   int get selectedComicId => _selectedComicsId;
 
-  // set methods
+  /// set methods
   void setSelectedComicsId(int value) {
     _selectedComicsId = value;
   }
@@ -29,7 +29,7 @@ class ComicsProvider with ChangeNotifier{
     _selectedComics = comics;
   }
 
-  //Method of returning comics from api
+  /// Method of returning comics from api
   Future<Comics> fetchComics(int num) async{
     Comics comics;
     String url ='https://xkcd.com/'+num.toString()+'/info.0.json'; // url for searching
@@ -68,7 +68,7 @@ class ComicsProvider with ChangeNotifier{
     }
   }
 
-  // go through  to comics
+  /// go through  to comics
   Future<Comics> nextComics(bool next){
     if(_selectedComics.num == _first){ // if selectedComics is the first one go to the first one
       return fetchComics(1);
@@ -85,7 +85,7 @@ class ComicsProvider with ChangeNotifier{
     }
     return fetchComics(-1);
   }
-
+  /// toggle favorites
   Future<void> toggleFavorites(Comics comics) async {
     final existingIndex =
       _favoritesComics.indexWhere((element) => element.num == comics.num); // get comics index if it is favorites
@@ -111,54 +111,49 @@ class ComicsProvider with ChangeNotifier{
     }
     notifyListeners();
   }
-  // check if comics is favorites;
+  /// check if comics is favorites;
   bool isComicsFavorites(int id){
     return _favoritesComics.any((element) => element.num == id);
   }
 
+  /// Help method for [fetchComicsByText]
+  /// Fetching a list of int from the result of searching by text
+  /// I did have problems with converting the response to a list. It was som strange hex values
+  /// in the response. This is the how i manage to do it but it is not the best way.
   Future<List<int>> fetchResponseFromTextToList(String text) async {
-    String url ='https://relevantxkcd.appspot.com/process?action=xkcd&query=$text';
-    final response = await http.get(Uri.parse(url));
-    if(response.statusCode==200) {
-      List<String> responseList = response.body.split("").toList();
-      List<String> numbers = [];
+    String url ='https://relevantxkcd.appspot.com/process?action=xkcd&query=$text';// The url
+    final response = await http.get(Uri.parse(url)); // Run the url
+    if(response.statusCode==200) { // if response is good
+      List<String> responseList = response.body.split("").toList(); // split the response into string.
+      List<String> responseLetters = [];
       RegExp regExp = new RegExp(r"[0-9a-zA-Z ]+");
-      final intRegex = new RegExp(r' +[0-9]+ +');
-      List<String> testList = [];
-      intRegex.allMatches(response.body).map((e){
-        print('From regex' + e.input);
-        testList.add(e.group(0));
-      }
-      );
-      for(var test in testList){
-        print(test);
-      }
 
-      for (int i = 0; i < responseList.length; i++) {
-        if (regExp.hasMatch(responseList[i])) {
-          numbers.add(responseList[i]);
+      for (int i = 0; i < responseList.length; i++) {// loops through list
+        if (regExp.hasMatch(responseList[i])) { // check if letter matches regular
+          responseLetters.add(responseList[i]); // add to list
         }
       }
-      List<String> matches = numbers.join().split(" ").toList();
-      List<int> lastList = [];
+      //joining the [responseLetters] and splits by space ang receive a list
+      List<String> responseListClean = responseLetters.join().split(" ").toList();
+      List<int> comicsNum = [];
 
-      for (var num in matches) {
-        try {
-          lastList.add(int.parse(num));
-        } catch (_) {
-        }
+      for (String num in responseListClean) {
+          int comicsId = int.tryParse(num);
+          if(comicsId != null){
+            comicsNum.add(comicsId);
+          }
       }
-      lastList.removeAt(0);
-      lastList.removeAt(0);
+      // removes first two element since they are not necessary
+      comicsNum.removeAt(0);
+      comicsNum.removeAt(0);
 
-      return lastList;
+      return comicsNum;
     }
     else{
       return [];
     }
-
   }
-
+  ///Fetching a list of Comics from text search
   Future<void> fetchComicsByText(String text) async {
     _searchComicsList = []; // Clear the search list
     await fetchResponseFromTextToList(text).then((comicsNumList) async { // get values for method
@@ -171,7 +166,7 @@ class ComicsProvider with ChangeNotifier{
     });
   }
 
-  //check if device have internet connection
+  ///check if device have internet connection
   Future<bool> checkIfOnline() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -185,7 +180,7 @@ class ComicsProvider with ChangeNotifier{
   }
 
 
-  //Make it easy to remember what values means
+  ///Make it easy to remember what values means
   int _first = -2;
   int _last = -3;
 }

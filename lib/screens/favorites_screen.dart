@@ -10,7 +10,6 @@ class FavoritesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var comicsData = Provider.of<ComicsProvider>(context);
     List<Comics> favorites = comicsData.favoritesComics;
-    print(favorites.length);
     final mediaQuery = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
@@ -37,9 +36,10 @@ class FavoritesScreen extends StatelessWidget {
             favorites.length > 0 ?Container(
               height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.9,
               child: ListView.builder(
+                key: Key('favoritesList'),//for testing
                 itemCount: favorites.length,
                 itemBuilder: (context, index) {
-                  return FavoritesItem(favorites[index]);
+                  return FavoritesItem(key: Key('comics_$index'),comics: favorites[index]);
                 },
               ),
             ): Text('You don\'t have any favorites'),

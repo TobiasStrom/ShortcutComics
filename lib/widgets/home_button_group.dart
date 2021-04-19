@@ -36,10 +36,10 @@ class _HomeButtonGroupState extends State<HomeButtonGroup> {
       future: _hasConnection,
       builder: (context, snapshot) {
         if(snapshot.hasData){
-          print(snapshot.data);
           return snapshot.data ? Column(
             children: [
               RoundedButton(
+                key: Key('todaysComics'), //for testing
                 text:'Show today\'s comics' ,
                 width: mediaQuery.size.width * 0.8,
                 height: 40,
@@ -50,6 +50,7 @@ class _HomeButtonGroupState extends State<HomeButtonGroup> {
               ),
               RoundedButton(
                 text:'Search for comics by id' ,
+                key: Key('searchId'), //for testing
                 width: mediaQuery.size.width * 0.8,
                 height: 35,
                 deactivate: false,
@@ -59,6 +60,7 @@ class _HomeButtonGroupState extends State<HomeButtonGroup> {
               ),
               RoundedButton(
                 text:'Search for comics by text',
+                key: Key('searchText'), //for testing
                 width: mediaQuery.size.width * 0.8,
                 height: 35,
                 deactivate: false,
@@ -67,6 +69,7 @@ class _HomeButtonGroupState extends State<HomeButtonGroup> {
                 },
               ),
               RoundedButton(
+                key: Key('favorites'), //for testing
                 text: 'Show Favorites',
                 width: mediaQuery.size.width * 0.8,
                 height: 35,

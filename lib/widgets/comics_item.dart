@@ -28,13 +28,14 @@ class ComicsItem extends StatelessWidget {
                 Flexible(
                   child: Text(
                     comics.title,
+                    key: Key('title'), // for testing
                     style: TextStyle(
                         fontSize: 25
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ),
-                IconButton(icon: Icon(Icons.home), onPressed: ()=> Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false)),
+                IconButton(key :Key('homeIcon'), icon: Icon(Icons.home), onPressed: ()=> Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false)),
               ],
             ),
           ),

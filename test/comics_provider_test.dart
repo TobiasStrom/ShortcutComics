@@ -8,7 +8,7 @@ import 'package:shortcut_comics/screens/search_screen.dart';
 
 void main() {
   final _comicsProvider = ComicsProvider();
-  test('get the last value', () async {
+  test('check if connected', () async {
     final comicsProvider = ComicsProvider();
     Future<bool> isOnline =  comicsProvider.checkIfOnline();
     expect(isOnline, completion(true));
@@ -18,6 +18,7 @@ void main() {
     Comics comics = await _comicsProvider.fetchComics(1);
     expect(comics.title, 'Barrel - Part 1');
   });
+
   test('fetch comics with to low id', () async {
     final comicsProvider = ComicsProvider();
     Comics comics = await comicsProvider.fetchComics(-123);
@@ -62,3 +63,4 @@ void main() {
     expect(comicsProvider.favoritesComics.length, 0);
   });
 }
+
