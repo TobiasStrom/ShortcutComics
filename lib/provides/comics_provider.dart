@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shortcut_comics/provides/database_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/comics.dart';
 
@@ -90,6 +91,7 @@ class ComicsProvider with ChangeNotifier{
     final existingIndex =
       _favoritesComics.indexWhere((element) => element.num == comics.num); // get comics index if it is favorites
     if(existingIndex >= 0) {
+      DatabaseProvider.db.deleteComics(comics.num);
       _favoritesComics.removeAt(existingIndex); // remove if from the list if it exists
       try {
         if (await File(comics.imageData).exists()) { // check if image exists on device
@@ -108,6 +110,7 @@ class ComicsProvider with ChangeNotifier{
       image.writeAsBytesSync(response.bodyBytes); //write image to device
       comics.imageData = filePathAndName; // set filepath to imageData.
       _favoritesComics.add(comics); // add if not exits
+      DatabaseProvider.db.insertComics(comics);
     }
     notifyListeners();
   }

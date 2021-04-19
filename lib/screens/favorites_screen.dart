@@ -2,10 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shortcut_comics/models/comics.dart';
 import 'package:shortcut_comics/provides/comics_provider.dart';
+import 'package:shortcut_comics/provides/database_provider.dart';
 import 'package:shortcut_comics/widgets/favorites_item.dart';
 
-class FavoritesScreen extends StatelessWidget {
+class FavoritesScreen extends StatefulWidget {
   static final routeName = "/favorites";
+
+  @override
+  _FavoritesScreenState createState() => _FavoritesScreenState();
+}
+
+class _FavoritesScreenState extends State<FavoritesScreen> {
+  Future<List<Comics>> _comicsList;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _comicsList = getComics();
+  }
+  Future<List<Comics>> getComics() async{
+    final _comicsData = await DatabaseProvider.db.comics();
+    return _comicsData;
+  }
+
   @override
   Widget build(BuildContext context) {
     var comicsData = Provider.of<ComicsProvider>(context);
@@ -33,19 +53,31 @@ class FavoritesScreen extends StatelessWidget {
               ),
               height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.1,
             ),
-            favorites.length > 0 ?Container(
-              height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.9,
-              child: ListView.builder(
-                key: Key('favoritesList'),//for testing
-                itemCount: favorites.length,
-                itemBuilder: (context, index) {
-                  return FavoritesItem(key: Key('comics_$index'),comics: favorites[index]);
-                },
-              ),
-            ): Text('You don\'t have any favorites'),
+
+            FutureBuilder<List<Comics>>(
+              future: _comicsList,
+              builder: (context, snapshot) {
+                if(snapshot.hasData){
+                  return snapshot.data.length > 0 ?Container(
+                    height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.9,
+                    child: ListView.builder(
+                      key: Key('favoritesList'),//for testing
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return FavoritesItem(key: Key('comics_$index'),comics: snapshot.data[index]);
+                      },
+                    ),
+                  ): Text('You don\'t have any favorites');
+                }
+                return Text('Went');
+            },)
           ],
         ),
       ),
     );
   }
 }
+
+/*
+
+ */

@@ -39,4 +39,36 @@ class Comics{
     month: json['month'],
     day: json['day'],
   );
+
+  factory Comics.fromDB(Map<String, dynamic> db) => Comics(
+    num: db['num'],
+    title: db['title'],
+    safeTitle: db['safe_title'],
+    alt: db['alt'],
+    img: db['img'],
+    link: db['link'],
+    news: db['news'],
+    transcript: db['transcript'],
+    year: db['year'],
+    month: db['month'],
+    day: db['day'],
+    imageData: db['imageData']
+  );
+
+  Map<String, dynamic> toMap(){
+    return{
+      'num': num,
+      'title': title,
+      'safeTitle': safeTitle,
+      'alt': alt,
+      'img': img,
+      'link': link,
+      'news': news,
+      'transcript': transcript,
+      'year': year,
+      'month': month,
+      'day': day,
+      'imageData': imageData,
+    };
+  }
 }
