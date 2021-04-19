@@ -43,12 +43,12 @@ class ComicsProvider with ChangeNotifier{
       notifyListeners();
       return comics;
     }
-    else if (response.statusCode == HttpStatus.notFound){
+    else if (response.statusCode == HttpStatus.notFound && _selectedComics != null){
       Comics comics = new Comics(
-        num: selectedComics.num == 1 ? _first : _last, //set comics number for handling next and prev comics
-        title: selectedComics.num == 1 ? 'That was the fist one': 'You have to wait for a new one',
-        safeTitle : selectedComics.num == 1 ? 'That was the fist one': 'You have to wait for a new one',
-        alt : selectedComics.num == 1 ? 'I se you like comics' : 'No more',
+        num: _selectedComics.num == 1 ? _first : _last, //set comics number for handling next and prev comics
+        title: _selectedComics.num == 1 ? 'That was the fist one': 'You have to wait for a new one',
+        safeTitle : _selectedComics.num == 1 ? 'That was the fist one': 'You have to wait for a new one',
+        alt : _selectedComics.num == 1 ? 'I se you like comics' : 'No more',
         img :'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Sad_face.svg/603px-Sad_face.svg.png', // default sad face image
       );
       _selectedComics = comics;
@@ -125,7 +125,6 @@ class ComicsProvider with ChangeNotifier{
       RegExp regExp = new RegExp(r"[0-9a-zA-Z ]+");
       final intRegex = new RegExp(r' +[0-9]+ +');
       List<String> testList = [];
-      print('Her');
       intRegex.allMatches(response.body).map((e){
         print('From regex' + e.input);
         testList.add(e.group(0));
@@ -147,7 +146,6 @@ class ComicsProvider with ChangeNotifier{
         try {
           lastList.add(int.parse(num));
         } catch (_) {
-          print('not string');
         }
       }
       lastList.removeAt(0);
@@ -161,7 +159,7 @@ class ComicsProvider with ChangeNotifier{
 
   }
 
-  void fetchComicsByText(String text) async {
+  Future<void> fetchComicsByText(String text) async {
     _searchComicsList = []; // Clear the search list
     await fetchResponseFromTextToList(text).then((comicsNumList) async { // get values for method
       List<int> intComics = comicsNumList; //puts result into list
@@ -178,11 +176,10 @@ class ComicsProvider with ChangeNotifier{
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        print('connected');
         return true;
       }
     } on SocketException catch (_) {
-      print('not connected');
+      return false;
     }
     return false;
   }
