@@ -29,7 +29,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     var comicsData = Provider.of<ComicsProvider>(context);
-    List<Comics> favorites = comicsData.favoritesComics;
     final mediaQuery = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
@@ -53,8 +52,25 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               ),
               height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.1,
             ),
+            Container(
+              height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.9,
+              child: ListView.builder(
+                itemCount: comicsData.favoritesComics.length,
+                itemBuilder: (context, index) {
+                  return FavoritesItem(key: Key('comics_$index'),comics: comicsData.favoritesComics[index]);
+                },
+              ),
+            ),
 
-            FutureBuilder<List<Comics>>(
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/*
+FutureBuilder<List<Comics>>(
               future: _comicsList,
               builder: (context, snapshot) {
                 if(snapshot.hasData){
@@ -69,15 +85,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     ),
                   ): Text('You don\'t have any favorites');
                 }
-                return Text('Went');
-            },)
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/*
-
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
  */

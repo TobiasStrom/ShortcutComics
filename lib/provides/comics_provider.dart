@@ -29,6 +29,9 @@ class ComicsProvider with ChangeNotifier{
   void setSelectedComics(Comics comics){
     _selectedComics = comics;
   }
+  void setFavoritesList(List<Comics> comicsList){
+    _favoritesComics = comicsList;
+  }
 
   /// Method of returning comics from api
   Future<Comics> fetchComics(int num) async{
@@ -86,37 +89,45 @@ class ComicsProvider with ChangeNotifier{
     }
     return fetchComics(-1);
   }
-  /// toggle favorites
-  Future<void> toggleFavorites(Comics comics) async {
+
+  Future<void> removeFromFavorites(Comics comics) async{
+    DatabaseProvider.db.deleteComics(comics.num);
     final existingIndex =
-      _favoritesComics.indexWhere((element) => element.num == comics.num); // get comics index if it is favorites
-    if(existingIndex >= 0) {
-      DatabaseProvider.db.deleteComics(comics.num);
-      _favoritesComics.removeAt(existingIndex); // remove if from the list if it exists
-      try {
-        if (await File(comics.imageData).exists()) { // check if image exists on device
-          await File(comics.imageData).delete(); // delete if exists
-        }
-      } catch (_) {
-        print('Image don\'t exist'); // print error
+    _favoritesComics.indexWhere((element) => element.num == comics.num); // get comics index if it is favorites
+    _favoritesComics.removeAt(existingIndex); // remove if from the list if it exists
+    try {
+      if (await File(comics.imageData).exists()) { // check if image exists on device
+        await File(comics.imageData).delete(); // delete if exists
       }
-    }else{
-      var response = await http.get(Uri.parse(comics.img)); // get image so it can be saved on device
-      Directory appDocDir = await getApplicationDocumentsDirectory(); // get app path on phone
-      var imagesPath = appDocDir.path + "/images"; // set image path
-      await Directory(imagesPath).create(recursive: true); // create directory if noe exist
-      var filePathAndName = appDocDir.path + '/images/${comics.num}.png'; // set file and path name
-      File image = new File(filePathAndName); // make new file from path
-      image.writeAsBytesSync(response.bodyBytes); //write image to device
-      comics.imageData = filePathAndName; // set filepath to imageData.
-      _favoritesComics.add(comics); // add if not exits
-      DatabaseProvider.db.insertComics(comics);
+    } catch (_) {
+      print('Image don\'t exist'); // print error
     }
     notifyListeners();
   }
+  /// toggle favorites
+  Future<void> addToFavorites(Comics comics) async {
+
+    var response = await http.get(Uri.parse(comics.img)); // get image so it can be saved on device
+    Directory appDocDir = await getApplicationDocumentsDirectory(); // get app path on phone
+    var imagesPath = appDocDir.path + "/images"; // set image path
+    await Directory(imagesPath).create(recursive: true); // create directory if noe exist
+    var filePathAndName = appDocDir.path + '/images/${comics.num}.png'; // set file and path name
+    File image = new File(filePathAndName); // make new file from path
+    image.writeAsBytesSync(response.bodyBytes); //write image to device
+    comics.imageData = filePathAndName; // set filepath to imageData.
+    _favoritesComics.add(comics); // add if not exits
+    DatabaseProvider.db.insertComics(comics);
+
+    notifyListeners();
+  }
   /// check if comics is favorites;
-  bool isComicsFavorites(int id){
-    return _favoritesComics.any((element) => element.num == id);
+  bool isComicsFavorites (int num) {
+    DatabaseProvider.db.checkIfExists(num).then((value){
+      if(value == 1){
+        return true;
+      }
+      return false;
+    });
   }
 
   /// Help method for [fetchComicsByText]
@@ -180,6 +191,11 @@ class ComicsProvider with ChangeNotifier{
       return false;
     }
     return false;
+  }
+
+  bool isComicsFavoritesList(int id){
+    print('Checking');
+    return _favoritesComics.any((element) => element.num == id);
   }
 
 

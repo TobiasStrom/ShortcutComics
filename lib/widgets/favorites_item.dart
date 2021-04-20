@@ -10,8 +10,6 @@ class FavoritesItem extends StatelessWidget {
 
   const FavoritesItem({Key key, this.comics}) : super(key: key);
 
-
-
   @override
   Widget build(BuildContext context) {
     var comicsData = Provider.of<ComicsProvider>(context);
@@ -40,7 +38,7 @@ class FavoritesItem extends StatelessWidget {
                 comics.year+"-"+comics.month+"-"+comics.day
             ),
             IconButton(icon: Icon(Icons.delete), onPressed: (){
-              comicsData.toggleFavorites(comics);
+              comicsData.removeFromFavorites(comics);
             }),
           ],
         ),

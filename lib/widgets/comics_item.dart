@@ -3,16 +3,22 @@ import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shortcut_comics/models/comics.dart';
 import 'package:shortcut_comics/provides/comics_provider.dart';
+import 'package:shortcut_comics/provides/database_provider.dart';
 
 class ComicsItem extends StatelessWidget {
   final Comics comics;
 
   const ComicsItem(this.comics);
 
+  Future<int> isFavorite(BuildContext context) async {
+    return DatabaseProvider.db.checkIfExists(comics.num);
+  }
+
   @override
   Widget build(BuildContext context) {
     var comicsData = Provider.of<ComicsProvider>(context);
-    bool isFavorites = comicsData.isComicsFavorites(comics.num);
+    bool isFavorites = comicsData.isComicsFavoritesList(comics.num);
+    print(isFavorites);
 
     return Padding(
       padding: EdgeInsets.all(15),
@@ -71,14 +77,14 @@ class ComicsItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                (isFavorites)?
+                isFavorites?
                 IconButton(
                   icon: Icon(
                     Icons.favorite,
                     color: Colors.red,
                   ),
                   onPressed: (){
-                    comicsData.toggleFavorites(comics);
+                    comicsData.removeFromFavorites(comics);
                   },
                   iconSize: 50,
                 ):
@@ -87,7 +93,7 @@ class ComicsItem extends StatelessWidget {
                       Icons.favorite_border_outlined
                   ),
                   onPressed: (){
-                    comicsData.toggleFavorites(comics);
+                    comicsData.addToFavorites(comics);
                   },
                 ),
                 Padding(

@@ -69,8 +69,7 @@ class _ComicsScreenState extends State<ComicsScreen> {
                             deactivate: comicsData.selectedComics.num != -3 ? false: true,
                             color: Colors.green,
                             onClick: (){
-                              comicsData.selectedComics.num != -3 ?
-                              _futureComics = comicsData.nextComics(true): null; //go to next comics
+                              _futureComics = comicsData.nextComics(true); //go to next comics
                             },
                           ),
                         ],

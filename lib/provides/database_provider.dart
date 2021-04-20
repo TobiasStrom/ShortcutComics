@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shortcut_comics/models/comics.dart';
+import 'package:shortcut_comics/provides/comics_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -17,7 +18,7 @@ class DatabaseProvider with ChangeNotifier{
   }
 
   Future<Database> initDB() async{
-    return await openDatabase(
+    Database database = await openDatabase(
       join(await getDatabasesPath(), 'comics_database.db'),
       // When the database is first created, create a table to store dogs.
       onCreate: (db, version) {
@@ -38,9 +39,9 @@ class DatabaseProvider with ChangeNotifier{
               "imageData TEXT)",
         );
       },
-
       version: 1,
     );
+    return database;
   }
 
   Future<void> insertComics(Comics comics) async {
@@ -66,10 +67,19 @@ class DatabaseProvider with ChangeNotifier{
     // Get a reference to the database.
     final db = await database;
     await db.delete(
-      'comics',
-      where: "id = ?",
+      'dogs',
+      where: "num = ?",
       whereArgs: [id],
     );
   }
+
+  Future<int> checkIfExists(int id) async{
+    final db = await database;
+    List<Map<String, dynamic>> list = await db.rawQuery('''SELECT EXISTS(SELECT num FROM dogs WHERE num="$id" LIMIT 1) as num;''');
+    print(list[0]['num']);
+    return list[0]['num'];
+    //return ;
+  }
+
 
 }

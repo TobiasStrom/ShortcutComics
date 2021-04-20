@@ -4,9 +4,11 @@ import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shortcut_comics/models/comics.dart';
 import 'package:shortcut_comics/provides/comics_provider.dart';
+import 'package:shortcut_comics/provides/database_provider.dart';
 import 'package:shortcut_comics/screens/search_screen.dart';
 
 void main() {
+
   final _comicsProvider = ComicsProvider();
   test('check if connected', () async {
     final comicsProvider = ComicsProvider();
@@ -50,16 +52,20 @@ void main() {
   });
 
   test('add to favorites',() async{
+    TestWidgetsFlutterBinding.ensureInitialized();
     final comicsProvider = ComicsProvider();
+    DatabaseProvider.db.initDB();
     Comics comics = await comicsProvider.fetchComics(1);
-    await comicsProvider.toggleFavorites(comics);
+    await comicsProvider.addToFavorites(comics);
     expect(comicsProvider.favoritesComics.length, 1);
   });
   test('remove from favorites',() async{
+    TestWidgetsFlutterBinding.ensureInitialized();
     final comicsProvider = ComicsProvider();
+    DatabaseProvider.db.initDB();
     Comics comics = await comicsProvider.fetchComics(1);
-    await comicsProvider.toggleFavorites(comics);
-    await comicsProvider.toggleFavorites(comics);
+    await comicsProvider.addToFavorites(comics);
+    await comicsProvider.removeFromFavorites(comics);
     expect(comicsProvider.favoritesComics.length, 0);
   });
 }

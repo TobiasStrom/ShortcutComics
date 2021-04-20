@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shortcut_comics/provides/comics_provider.dart';
+import 'package:shortcut_comics/provides/database_provider.dart';
 import 'package:shortcut_comics/screens/comics_screen.dart';
 import 'package:shortcut_comics/screens/favorites_screen.dart';
 import 'package:shortcut_comics/screens/search_screen.dart';
@@ -17,8 +18,16 @@ class _HomeButtonGroupState extends State<HomeButtonGroup> {
   Future<bool> _hasConnection;
 
   @override
-  void initState() {
+  void initState()  {
     super.initState();
+    final comicsData = context.read<ComicsProvider>();
+    DatabaseProvider.db.comics().then((list) => comicsData.setFavoritesList(list));
+    setState(() {
+      _hasConnection = comicsData.checkIfOnline();
+    });
+  }
+
+  void _checkConnection(){
     final comicsData = context.read<ComicsProvider>();
     setState(() {
       _hasConnection = comicsData.checkIfOnline();
@@ -90,8 +99,8 @@ class _HomeButtonGroupState extends State<HomeButtonGroup> {
                 onClick: () {
                   Navigator.pushNamed(context, FavoritesScreen.routeName);
                 },
-
               ),
+              IconButton(icon: Icon(Icons.refresh), onPressed: () => _checkConnection())
             ],
           );
         }

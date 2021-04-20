@@ -12,6 +12,7 @@ import 'package:shortcut_comics/screens/search_text_screen.dart';
 void main() async {
   runApp(MyApp());
   DatabaseProvider.db.initDB();
+
 }
 
 class MyApp extends StatelessWidget {

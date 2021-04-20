@@ -48,7 +48,7 @@ class SearchResultItem extends StatelessWidget{
                   color: Colors.red,
                 ),
                 onPressed: (){
-                  comicsData.toggleFavorites(comics);
+                  comicsData.removeFromFavorites(comics);
                 },
                 iconSize: 50,
               ):
@@ -57,7 +57,7 @@ class SearchResultItem extends StatelessWidget{
                     Icons.favorite_border_outlined
                 ),
                 onPressed: (){
-                  comicsData.toggleFavorites(comics);
+                  comicsData.addToFavorites(comics);
                 },
               ),
             ],
