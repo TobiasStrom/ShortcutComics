@@ -4,7 +4,7 @@
 
 The challenge is to create an app to browse through comics. The challenge is created by Shortcut. Link to task: https://github.com/shortcut/coding-assignment-mobile
 
-##Project Structure
+## Project Structure
 
 When starting a new Flutter project it generates all necessary files to start developing. The project code is in the lib folder. In the lib folder, I have created four folders. They are models, screens, widgets and providers. For testing, there are three folders. The first one is integration_test for integration testing, test for unit testing and test_driver for running the integration testing.  
 
@@ -55,7 +55,7 @@ To check if the phone was online or not doesn't work that well. If the user lose
 
 I have tried my best to create the app with dynamic sizing. I have tested the app on small devices and some tablets. It looks pretty good on all of the devices I have tested on.
 
-###
+### Last points
 
 The last three points I haven't created. I didn’t find a good way to receive the explanation to a comic. The best way I found was to download the whole page in raw HTML code and find the info I needed. So I decided not to do that.  
 
