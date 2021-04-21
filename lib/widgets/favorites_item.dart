@@ -8,7 +8,7 @@ import 'package:shortcut_comics/provides/comics_provider.dart';
 class FavoritesItem extends StatelessWidget {
   final Comics comics;
 
-  const FavoritesItem(this.comics);
+  const FavoritesItem({Key key, this.comics}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +21,7 @@ class FavoritesItem extends StatelessWidget {
           children: [
             Text(
               comics.title,
+              key: Key('favoriteTitle'),
               style: TextStyle(
                   fontSize: 20
               ),
@@ -37,7 +38,7 @@ class FavoritesItem extends StatelessWidget {
                 comics.year+"-"+comics.month+"-"+comics.day
             ),
             IconButton(icon: Icon(Icons.delete), onPressed: (){
-              comicsData.toggleFavorites(comics);
+              comicsData.removeFromFavorites(comics);
             }),
           ],
         ),

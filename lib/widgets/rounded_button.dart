@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RoundedButton extends StatelessWidget {
@@ -11,8 +8,17 @@ class RoundedButton extends StatelessWidget {
   final double height;
   final GestureTapCallback onClick;
   final Color color;
+  final bool deactivate;
 
-  const RoundedButton({Key key, this.text, this.width, this.height, this.onClick, this.color}) : super(key: key);
+  const RoundedButton({
+    Key key,
+    this.text,
+    this.width,
+    this.height,
+    this.onClick,
+    this.color,
+    this.deactivate
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +27,8 @@ class RoundedButton extends StatelessWidget {
       child: SizedBox(// To set button size
         height: height,
         width: width,
-        child: Platform.isIOS ? // if platform is ios add iOS button else Android button
-          CupertinoButton(
-            child: Text(text),
-            onPressed: onClick,
-            color: color,
-          ) : ElevatedButton(
-          onPressed: onClick,
+        child: ElevatedButton(
+          onPressed: !deactivate ? onClick: null,
           child: Text(text),
           style: ElevatedButton.styleFrom(
             primary: color,
