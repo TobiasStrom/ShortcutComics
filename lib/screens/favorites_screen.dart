@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shortcut_comics/models/comics.dart';
 import 'package:shortcut_comics/provides/comics_provider.dart';
-import 'package:shortcut_comics/provides/database_provider.dart';
+import 'package:shortcut_comics/screens/comics_screen.dart';
 import 'package:shortcut_comics/widgets/favorites_item.dart';
+import 'package:shortcut_comics/widgets/navigator_bar.dart';
+import 'package:shortcut_comics/widgets/rounded_button.dart';
 
 class FavoritesScreen extends StatefulWidget {
   static final routeName = "/favorites";
@@ -13,17 +14,10 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  Future<List<Comics>> _comicsList;
-
 
   @override
   void initState() {
     super.initState();
-    _comicsList = getComics();
-  }
-  Future<List<Comics>> getComics() async{
-    final _comicsData = await DatabaseProvider.db.comics();
-    return _comicsData;
   }
 
   @override
@@ -36,23 +30,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           children: [
             Container(child:
               Center(child:
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(icon: Icon(Icons.arrow_back), onPressed: ()=> Navigator.pop(context)),
-                    Text(
-                      'Favorites',
-                      style: TextStyle(
-                          fontSize: 30
-                      ),
-                    ),
-                    IconButton(icon: Icon(Icons.home), onPressed: ()=> Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false)),
-                  ],
-                ),
+                  NavigatorBar(text: 'Favorites', fontSize: 30,)
               ),
               height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.1,
             ),
-            Container(
+            comicsData.favoritesComics.length > 0 ? Container(
               height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.9,
               child: ListView.builder(
                 itemCount: comicsData.favoritesComics.length,
@@ -60,8 +42,21 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   return FavoritesItem(key: Key('comics_$index'),comics: comicsData.favoritesComics[index]);
                 },
               ),
+            ): Column( // If you don't have any favorites
+              children: [
+                Text('You don\'t have any favorites'),
+                RoundedButton(
+                  key: Key('todaysComics'), //for testing
+                  text:'Browse comics' ,
+                  width: mediaQuery.size.width * 0.5,
+                  height: 40,
+                  deactivate: false,
+                  onClick: () {
+                    Navigator.pushNamed(context, ComicsScreen.routeName);//Navigate to today's comics
+                  },
+                ),
+              ],
             ),
-
           ],
         ),
       ),
@@ -69,25 +64,3 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 }
 
-/*
-FutureBuilder<List<Comics>>(
-              future: _comicsList,
-              builder: (context, snapshot) {
-                if(snapshot.hasData){
-                  return snapshot.data.length > 0 ?Container(
-                    height: (mediaQuery.size.height - mediaQuery.padding.top) * 0.9,
-                    child: ListView.builder(
-                      key: Key('favoritesList'),//for testing
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        return FavoritesItem(key: Key('comics_$index'),comics: snapshot.data[index]);
-                      },
-                    ),
-                  ): Text('You don\'t have any favorites');
-                }
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            ),
- */

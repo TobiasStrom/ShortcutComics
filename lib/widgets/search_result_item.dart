@@ -11,7 +11,7 @@ class SearchResultItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     var comicsData = Provider.of<ComicsProvider>(context);
-    bool isFavorites = comicsData.isComicsFavorites(comics.num);
+    bool isFavorites = comicsData.isComicsFavoritesList(comics.num);
     return InkWell(
       onTap: (){
         comicsData.setSelectedComicsId(comics.num);

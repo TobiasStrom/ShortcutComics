@@ -10,6 +10,10 @@ import 'package:shortcut_comics/screens/search_text_screen.dart';
 import 'rounded_button.dart';
 
 class HomeButtonGroup extends StatefulWidget {
+  final double width;
+
+  const HomeButtonGroup(this.width);
+
   @override
   _HomeButtonGroupState createState() => _HomeButtonGroupState();
 }
@@ -17,15 +21,19 @@ class HomeButtonGroup extends StatefulWidget {
 class _HomeButtonGroupState extends State<HomeButtonGroup> {
   Future<bool> _hasConnection;
 
+
+
   @override
   void initState()  {
     super.initState();
     final comicsData = context.read<ComicsProvider>();
+    comicsData.setFavoritesList([]); // set the value to empty before it get data from sqlite
     DatabaseProvider.db.comics().then((list) => comicsData.setFavoritesList(list));
     setState(() {
       _hasConnection = comicsData.checkIfOnline();
     });
   }
+
 
   void _checkConnection(){
     final comicsData = context.read<ComicsProvider>();
@@ -50,7 +58,7 @@ class _HomeButtonGroupState extends State<HomeButtonGroup> {
               RoundedButton(
                 key: Key('todaysComics'), //for testing
                 text:'Show today\'s comics' ,
-                width: mediaQuery.size.width * 0.8,
+                width: mediaQuery.size.width * widget.width,
                 height: 40,
                 deactivate: false,
                 onClick: () {
@@ -60,7 +68,7 @@ class _HomeButtonGroupState extends State<HomeButtonGroup> {
               RoundedButton(
                 text:'Search for comics by id' ,
                 key: Key('searchId'), //for testing
-                width: mediaQuery.size.width * 0.8,
+                width: mediaQuery.size.width * widget.width,
                 height: 35,
                 deactivate: false,
                 onClick: (){
@@ -70,7 +78,7 @@ class _HomeButtonGroupState extends State<HomeButtonGroup> {
               RoundedButton(
                 text:'Search for comics by text',
                 key: Key('searchText'), //for testing
-                width: mediaQuery.size.width * 0.8,
+                width: mediaQuery.size.width * widget.width,
                 height: 35,
                 deactivate: false,
                 onClick: (){
@@ -80,7 +88,7 @@ class _HomeButtonGroupState extends State<HomeButtonGroup> {
               RoundedButton(
                 key: Key('favorites'), //for testing
                 text: 'Show Favorites',
-                width: mediaQuery.size.width * 0.8,
+                width: mediaQuery.size.width * widget.width,
                 height: 35,
                 deactivate: false,
                 onClick: () {
@@ -93,7 +101,7 @@ class _HomeButtonGroupState extends State<HomeButtonGroup> {
               Text('You don\' have internet connection '),
               RoundedButton(
                 text: 'Show Favorites',
-                width: mediaQuery.size.width * 0.8,
+                width: mediaQuery.size.width * widget.width,
                 height: 35,
                 deactivate: false,
                 onClick: () {
@@ -108,42 +116,3 @@ class _HomeButtonGroupState extends State<HomeButtonGroup> {
     },);
   }
 }
-
-/*
-Column(
-      children: [
-        RoundedButton(
-          text:'Show today\'s comics' ,
-          width: mediaQuery.size.width * 0.8,
-          height: 40,
-          onClick: () {
-            Navigator.pushNamed(context, ComicsScreen.routeName);//Navigate to today's comics
-          },
-        ),
-        RoundedButton(
-          text:'Search for comics by id' ,
-          width: mediaQuery.size.width * 0.8,
-          height: 35,
-          onClick: (){
-            Navigator.pushNamed(context, SearchScreen.routeName);
-          },
-        ),
-        RoundedButton(
-          text:'Search for comics by text',
-          width: mediaQuery.size.width * 0.8,
-          height: 35,
-          onClick: (){
-            Navigator.pushNamed(context, SearchTextScreen.routeName);
-          },
-        ),
-        RoundedButton(
-          text: 'Show Favorites',
-          width: mediaQuery.size.width * 0.8,
-          height: 35,
-          onClick: () {
-            Navigator.pushNamed(context, FavoritesScreen.routeName);
-          },
-        ),
-      ],
-    )
- */

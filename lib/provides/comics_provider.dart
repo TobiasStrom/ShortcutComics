@@ -4,16 +4,14 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shortcut_comics/provides/database_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../models/comics.dart';
 
 class ComicsProvider with ChangeNotifier{
 
   Comics _selectedComics;
   List<Comics> _favoritesComics = [];
-  int _selectedComicsId;
+  int _selectedComicsId; // value for searching
   List<Comics> _searchComicsList = [];
 
   /// get methods
@@ -106,7 +104,6 @@ class ComicsProvider with ChangeNotifier{
   }
   /// toggle favorites
   Future<void> addToFavorites(Comics comics) async {
-
     var response = await http.get(Uri.parse(comics.img)); // get image so it can be saved on device
     Directory appDocDir = await getApplicationDocumentsDirectory(); // get app path on phone
     var imagesPath = appDocDir.path + "/images"; // set image path
@@ -120,20 +117,13 @@ class ComicsProvider with ChangeNotifier{
 
     notifyListeners();
   }
-  /// check if comics is favorites;
-  bool isComicsFavorites (int num) {
-    DatabaseProvider.db.checkIfExists(num).then((value){
-      if(value == 1){
-        return true;
-      }
-      return false;
-    });
-  }
+
 
   /// Help method for [fetchComicsByText]
   /// Fetching a list of int from the result of searching by text
-  /// I did have problems with converting the response to a list. It was som strange hex values
-  /// in the response. This is the how i manage to do it but it is not the best way.
+  /// I did have problems with converting the response to a list. It was some strange hex values
+  /// in the response.
+  /// This is the how i manage to do it but it is not the best way.
   Future<List<int>> fetchResponseFromTextToList(String text) async {
     String url ='https://relevantxkcd.appspot.com/process?action=xkcd&query=$text';// The url
     final response = await http.get(Uri.parse(url)); // Run the url
@@ -192,9 +182,8 @@ class ComicsProvider with ChangeNotifier{
     }
     return false;
   }
-
+  /// check if comics is favorites
   bool isComicsFavoritesList(int id){
-    print('Checking');
     return _favoritesComics.any((element) => element.num == id);
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shortcut_comics/provides/comics_provider.dart';
+import 'package:shortcut_comics/widgets/navigator_bar.dart';
 import 'package:shortcut_comics/widgets/search_result_item.dart';
 
 class SearchResultScreen extends StatefulWidget {
@@ -23,19 +24,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
               Container(
                 height: (mediaQuery.size.height - mediaQuery.padding.top)* 0.1,
                 child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(icon: Icon(Icons.arrow_back), onPressed: ()=> Navigator.pop(context)),
-                      Text(
-                          'Results',
-                        style: TextStyle(
-                          fontSize: 25
-                        ),
-                      ),
-                      IconButton(icon: Icon(Icons.home), onPressed: ()=> Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false)),
-                    ],
-                  ),
+                  child: NavigatorBar(text: 'Results', fontSize: 25,),
                 ),
               ),
               Container(
@@ -43,7 +32,6 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                 child: ListView.builder(
                   itemBuilder: (context, index) {
                     return SearchResultItem(comicsData.searchComicsList[index]);
-                    //return Text(comicsList[index].toString());
                   },
                   itemCount: comicsData.searchComicsList.length,
                 ),

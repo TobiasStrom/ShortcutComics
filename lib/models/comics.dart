@@ -26,6 +26,7 @@ class Comics{
     this.day,
     this.imageData});
 
+  /// Convert data from JSON to Comics object
   factory Comics.fromJson(Map<String, dynamic> json) => Comics(
     num: json['num'],
     title: json['title'],
@@ -39,7 +40,7 @@ class Comics{
     month: json['month'],
     day: json['day'],
   );
-
+  ///Convert data from sqlite to a Comics object
   factory Comics.fromDB(Map<String, dynamic> db) => Comics(
     num: db['num'],
     title: db['title'],
@@ -54,7 +55,7 @@ class Comics{
     day: db['day'],
     imageData: db['imageData']
   );
-
+ /// For sending data to sqlite.
   Map<String, dynamic> toMap(){
     return{
       'num': num,

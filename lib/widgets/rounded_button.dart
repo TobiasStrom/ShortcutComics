@@ -1,5 +1,3 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RoundedButton extends StatelessWidget {
@@ -12,7 +10,15 @@ class RoundedButton extends StatelessWidget {
   final Color color;
   final bool deactivate;
 
-  const RoundedButton({Key key, this.text, this.width, this.height, this.onClick, this.color, this.deactivate}) : super(key: key);
+  const RoundedButton({
+    Key key,
+    this.text,
+    this.width,
+    this.height,
+    this.onClick,
+    this.color,
+    this.deactivate
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

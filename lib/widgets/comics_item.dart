@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shortcut_comics/models/comics.dart';
 import 'package:shortcut_comics/provides/comics_provider.dart';
@@ -7,7 +6,6 @@ import 'package:shortcut_comics/provides/database_provider.dart';
 
 class ComicsItem extends StatelessWidget {
   final Comics comics;
-
   const ComicsItem(this.comics);
 
   Future<int> isFavorite(BuildContext context) async {
@@ -18,7 +16,6 @@ class ComicsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var comicsData = Provider.of<ComicsProvider>(context);
     bool isFavorites = comicsData.isComicsFavoritesList(comics.num);
-    print(isFavorites);
 
     return Padding(
       padding: EdgeInsets.all(15),
@@ -55,7 +52,7 @@ class ComicsItem extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              'Description: ',
+              'Description',
               style: TextStyle(
                 fontSize: 18,
               ),
@@ -71,7 +68,7 @@ class ComicsItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'If you like make favorite:',
+                    'If you like it make favorite',
                     style: TextStyle(
                       fontSize: 18,
                     ),

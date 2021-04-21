@@ -18,6 +18,7 @@ class _SearchTextScreenState extends State<SearchTextScreen> {
   bool _searching = false;
   final _nameHolder = TextEditingController();
 
+  /// Check input
   bool _checkInput(String text){
     RegExp regExp = new RegExp(r"^[a-zA-Z]+$");
     if(regExp.hasMatch(text)){
@@ -31,6 +32,7 @@ class _SearchTextScreenState extends State<SearchTextScreen> {
     final mediaQuery = MediaQuery.of(context);
     var comicsData = Provider.of<ComicsProvider>(context);
 
+    /// When the user submit the form
     _onSubmit() async {
       if(_formKey.currentState.validate()){
         setState(() {
